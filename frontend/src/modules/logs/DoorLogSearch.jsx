@@ -1,45 +1,39 @@
 import { Search } from "lucide-react";
-import { useMemo, useState } from "react";
 
-import { EmptyState } from "../../components/EmptyState";
+import { ListPage } from "../../components/ListPage";
 import { StatusBadge } from "../../components/StatusBadge";
+import { useFilter } from "../../hooks/useFilter";
 import { formatDateTime } from "../../utils/format";
 
 export function DoorLogSearch({ data }) {
-  const [keyword, setKeyword] = useState("");
-  const [result, setResult] = useState("");
+  const { keyword, setKeyword, filterValues, setFilter, filtered } = useFilter(data.logs, {
+    keywordFields: ["opener_name", "device_name", "failure_reason"],
+    filters: { result: "" },
+  });
 
-  const logs = useMemo(() => {
-    return data.logs.filter((log) => {
-      const matchesKeyword = keyword
-        ? `${log.opener_name}${log.device_name}${log.failure_reason}`.toLowerCase().includes(keyword.toLowerCase())
-        : true;
-      const matchesResult = result ? log.result === result : true;
-      return matchesKeyword && matchesResult;
-    });
-  }, [data.logs, keyword, result]);
+  const filters = (
+    <div className="filter-bar">
+      <label>
+        <Search size={16} />
+        <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder="搜索人员、设备或原因" />
+      </label>
+      <select value={filterValues.result} onChange={(event) => setFilter("result", event.target.value)}>
+        <option value="">全部结果</option>
+        <option value="success">成功</option>
+        <option value="denied">拒绝</option>
+      </select>
+    </div>
+  );
 
   return (
-    <section className="view-stack">
-      <header className="page-header">
-        <div>
-          <h1>开门日志查询</h1>
-          <p>按人员、设备、失败原因和开门结果快速筛选门禁流水。</p>
-        </div>
-      </header>
-
-      <div className="filter-bar">
-        <label>
-          <Search size={16} />
-          <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder="搜索人员、设备或原因" />
-        </label>
-        <select value={result} onChange={(event) => setResult(event.target.value)}>
-          <option value="">全部结果</option>
-          <option value="success">成功</option>
-          <option value="denied">拒绝</option>
-        </select>
-      </div>
-
+    <ListPage
+      title="开门日志查询"
+      description="按人员、设备、失败原因和开门结果快速筛选门禁流水。"
+      loading={data.loading}
+      error={data.error}
+      items={filtered}
+      filters={filters}
+    >
       <div className="table-panel">
         <table>
           <thead>
@@ -54,7 +48,7 @@ export function DoorLogSearch({ data }) {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log) => (
+            {filtered.map((log) => (
               <tr key={log.id}>
                 <td>{formatDateTime(log.opened_at)}</td>
                 <td>{log.opener_name}</td>
@@ -67,8 +61,7 @@ export function DoorLogSearch({ data }) {
             ))}
           </tbody>
         </table>
-        {!logs.length && <EmptyState />}
       </div>
-    </section>
+    </ListPage>
   );
 }

@@ -1,19 +1,18 @@
 import { CalendarClock, Phone, UserRound } from "lucide-react";
 
-import { EmptyState } from "../../components/EmptyState";
+import { ListPage } from "../../components/ListPage";
 import { StatusBadge } from "../../components/StatusBadge";
 import { formatDateTime } from "../../utils/format";
 
 export function VisitorRecords({ data }) {
   return (
-    <section className="view-stack">
-      <header className="page-header">
-        <div>
-          <h1>访客通行记录</h1>
-          <p>跟踪访客预约、审批状态、拜访对象和授权门禁。</p>
-        </div>
-      </header>
-
+    <ListPage
+      title="访客通行记录"
+      description="跟踪访客预约、审批状态、拜访对象和授权门禁。"
+      loading={data.loading}
+      error={data.error}
+      items={data.visitors}
+    >
       <div className="record-grid">
         {data.visitors.map((visitor) => (
           <article className="record-card" key={visitor.id}>
@@ -31,7 +30,6 @@ export function VisitorRecords({ data }) {
           </article>
         ))}
       </div>
-      {!data.visitors.length && <EmptyState />}
-    </section>
+    </ListPage>
   );
 }

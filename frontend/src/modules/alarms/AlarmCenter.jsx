@@ -1,19 +1,18 @@
 import { Siren } from "lucide-react";
 
-import { EmptyState } from "../../components/EmptyState";
+import { ListPage } from "../../components/ListPage";
 import { StatusBadge } from "../../components/StatusBadge";
 import { formatDateTime } from "../../utils/format";
 
 export function AlarmCenter({ data }) {
   return (
-    <section className="view-stack">
-      <header className="page-header">
-        <div>
-          <h1>异常报警中心</h1>
-          <p>集中处理尾随、暴力开门、设备离线和黑名单相关报警。</p>
-        </div>
-      </header>
-
+    <ListPage
+      title="异常报警中心"
+      description="集中处理尾随、暴力开门、设备离线和黑名单相关报警。"
+      loading={data.loading}
+      error={data.error}
+      items={data.alarms}
+    >
       <div className="alarm-list">
         {data.alarms.map((alarm) => (
           <article className="alarm-item" key={alarm.id}>
@@ -32,7 +31,6 @@ export function AlarmCenter({ data }) {
           </article>
         ))}
       </div>
-      {!data.alarms.length && <EmptyState />}
-    </section>
+    </ListPage>
   );
 }

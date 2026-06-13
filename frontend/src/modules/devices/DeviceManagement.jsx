@@ -1,19 +1,18 @@
 import { Activity, MapPin } from "lucide-react";
 
-import { EmptyState } from "../../components/EmptyState";
+import { ListPage } from "../../components/ListPage";
 import { StatusBadge } from "../../components/StatusBadge";
 import { formatDateTime } from "../../utils/format";
 
 export function DeviceManagement({ data }) {
   return (
-    <section className="view-stack">
-      <header className="page-header">
-        <div>
-          <h1>门禁设备管理</h1>
-          <p>查看各出入口设备状态、安装位置和最近心跳时间。</p>
-        </div>
-      </header>
-
+    <ListPage
+      title="门禁设备管理"
+      description="查看各出入口设备状态、安装位置和最近心跳时间。"
+      loading={data.loading}
+      error={data.error}
+      items={data.devices}
+    >
       <div className="table-panel">
         <table>
           <thead>
@@ -37,8 +36,7 @@ export function DeviceManagement({ data }) {
             ))}
           </tbody>
         </table>
-        {!data.devices.length && <EmptyState />}
       </div>
-    </section>
+    </ListPage>
   );
 }

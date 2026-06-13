@@ -423,10 +423,23 @@ dd {
   color: #6b7785;
   padding: 24px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.error-panel {
+.empty-state.error-panel {
   color: #8e2525;
+}
+
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @media (max-width: 980px) {
