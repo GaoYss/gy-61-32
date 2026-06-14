@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { RotateCcw, Search } from "lucide-react";
 
 import { ListPage } from "../../components/ListPage";
 import { StatusBadge } from "../../components/StatusBadge";
@@ -6,10 +6,12 @@ import { useFilter } from "../../hooks/useFilter";
 import { formatDateTime } from "../../utils/format";
 
 export function DoorLogSearch({ data }) {
-  const { keyword, setKeyword, filterValues, setFilter, filtered } = useFilter(data.logs, {
+  const { keyword, setKeyword, filterValues, setFilter, resetFilters, filtered } = useFilter(data.logs, {
     keywordFields: ["opener_name", "device_name", "failure_reason"],
     filters: { result: "" },
   });
+
+  const hasFilter = keyword || filterValues.result;
 
   const filters = (
     <div className="filter-bar">
@@ -22,6 +24,13 @@ export function DoorLogSearch({ data }) {
         <option value="success">成功</option>
         <option value="denied">拒绝</option>
       </select>
+      {hasFilter && (
+        <button type="button" className="filter-clear" onClick={resetFilters}>
+          <RotateCcw size={14} />
+          清空筛选
+        </button>
+      )}
+      <span className="filter-count">显示 {filtered.length} / 共 {data.logs.length} 条</span>
     </div>
   );
 

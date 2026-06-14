@@ -1,4 +1,4 @@
-import { Activity, MapPin, Search } from "lucide-react";
+import { Activity, MapPin, RotateCcw, Search } from "lucide-react";
 
 import { ListPage } from "../../components/ListPage";
 import { StatusBadge } from "../../components/StatusBadge";
@@ -6,10 +6,12 @@ import { useFilter } from "../../hooks/useFilter";
 import { formatDateTime } from "../../utils/format";
 
 export function DeviceManagement({ data }) {
-  const { keyword, setKeyword, filterValues, setFilter, filtered } = useFilter(data.devices, {
+  const { keyword, setKeyword, filterValues, setFilter, resetFilters, filtered } = useFilter(data.devices, {
     keywordFields: ["device_code", "name", "location"],
     filters: { status: "" },
   });
+
+  const hasFilter = keyword || filterValues.status;
 
   const filters = (
     <div className="filter-bar">
@@ -23,6 +25,13 @@ export function DeviceManagement({ data }) {
         <option value="offline">离线</option>
         <option value="maintenance">维护中</option>
       </select>
+      {hasFilter && (
+        <button type="button" className="filter-clear" onClick={resetFilters}>
+          <RotateCcw size={14} />
+          清空筛选
+        </button>
+      )}
+      <span className="filter-count">显示 {filtered.length} / 共 {data.devices.length} 条</span>
     </div>
   );
 

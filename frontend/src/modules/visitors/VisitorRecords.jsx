@@ -1,4 +1,4 @@
-import { CalendarClock, Phone, Search, UserRound } from "lucide-react";
+import { CalendarClock, Phone, RotateCcw, Search, UserRound } from "lucide-react";
 
 import { ListPage } from "../../components/ListPage";
 import { StatusBadge } from "../../components/StatusBadge";
@@ -6,10 +6,12 @@ import { useFilter } from "../../hooks/useFilter";
 import { formatDateTime } from "../../utils/format";
 
 export function VisitorRecords({ data }) {
-  const { keyword, setKeyword, filterValues, setFilter, filtered } = useFilter(data.visitors, {
+  const { keyword, setKeyword, filterValues, setFilter, resetFilters, filtered } = useFilter(data.visitors, {
     keywordFields: ["visitor_name", "host_name", "phone", "reason", "device_name"],
     filters: { pass_status: "" },
   });
+
+  const hasFilter = keyword || filterValues.pass_status;
 
   const filters = (
     <div className="filter-bar">
@@ -24,6 +26,13 @@ export function VisitorRecords({ data }) {
         <option value="rejected">已拒绝</option>
         <option value="expired">已过期</option>
       </select>
+      {hasFilter && (
+        <button type="button" className="filter-clear" onClick={resetFilters}>
+          <RotateCcw size={14} />
+          清空筛选
+        </button>
+      )}
+      <span className="filter-count">显示 {filtered.length} / 共 {data.visitors.length} 条</span>
     </div>
   );
 

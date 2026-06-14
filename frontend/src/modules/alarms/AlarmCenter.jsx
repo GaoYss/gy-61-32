@@ -1,4 +1,4 @@
-import { Search, Siren } from "lucide-react";
+import { RotateCcw, Search, Siren } from "lucide-react";
 
 import { ListPage } from "../../components/ListPage";
 import { StatusBadge } from "../../components/StatusBadge";
@@ -6,10 +6,12 @@ import { useFilter } from "../../hooks/useFilter";
 import { formatDateTime } from "../../utils/format";
 
 export function AlarmCenter({ data }) {
-  const { keyword, setKeyword, filterValues, setFilter, filtered } = useFilter(data.alarms, {
+  const { keyword, setKeyword, filterValues, setFilter, resetFilters, filtered } = useFilter(data.alarms, {
     keywordFields: ["title", "description", "device_name"],
     filters: { status: "", level: "" },
   });
+
+  const hasFilter = keyword || filterValues.status || filterValues.level;
 
   const filters = (
     <div className="filter-bar">
@@ -29,6 +31,13 @@ export function AlarmCenter({ data }) {
         <option value="medium">中</option>
         <option value="high">高</option>
       </select>
+      {hasFilter && (
+        <button type="button" className="filter-clear" onClick={resetFilters}>
+          <RotateCcw size={14} />
+          清空筛选
+        </button>
+      )}
+      <span className="filter-count">显示 {filtered.length} / 共 {data.alarms.length} 条</span>
     </div>
   );
 

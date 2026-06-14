@@ -418,6 +418,30 @@ dd {
   background: #ffffff;
 }
 
+.filter-bar .filter-clear {
+  min-height: 42px;
+  border: 1px solid #ccd7e0;
+  border-radius: 8px;
+  padding: 0 14px;
+  background: #ffffff;
+  color: #536272;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-bar .filter-clear:hover {
+  border-color: #9aa4b9;
+  color: #17202a;
+}
+
+.filter-count {
+  margin-left: auto;
+  color: #647282;
+  font-size: 14px;
+}
+
 .empty-state,
 .error-panel {
   color: #6b7785;
